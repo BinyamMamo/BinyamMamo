@@ -1,6 +1,6 @@
 [![MasterHead](https://user-images.githubusercontent.com/74038190/225813708-98b745f2-7d22-48cf-9150-083f1b00d6c9.gif)](https://rishavchanda.io)
 <h1 align="center">Hi 👋, I'm Binyam Mamo</h1>
-<h3 align="center">A passionate student from Ethiopia</h3>
+<h3 align="center">A passionate Software Engineering student from Ethiopia</h3>
 <img align="right" width="300" src="https://user-images.githubusercontent.com/74038190/216644497-1951db19-8f3d-4e44-ac08-8e9d7e0d94a7.gif">
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=binyammamo&label=Profile%20views&color=0e75b6&style=flat" alt="binyammamo" /> </p>
