@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+        body {
+            background-color: #1e1e1e;
+            color: #008080; /* Teal color */
+            font-family: 'Orbitron', sans-serif;
+            color: #32aa32;
+            /* font-family: 'Courier New', monospace; */
+            height: 100vh;
+            letter-spacing: 0.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0;
+        }
+        p {
+            font-size: 1.5em;
+            margin-top: 0.5em;
+        }
+        .blinking-cursor {
+            font-weight: 100;
+            font-size: 2.5em;
+            color: #32CD32;
+            -webkit-animation: blink 1s infinite;
+            -moz-animation: blink 1s infinite;
+            -ms-animation: blink 1s infinite;
+            -o-animation: blink 1s infinite;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @-webkit-keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Coming Soon<span class="blinking-cursor">_</span></h1>
+        <p>working on something awesome. Stay tuned!</p>
+    </div>
+</body>
+</html>
