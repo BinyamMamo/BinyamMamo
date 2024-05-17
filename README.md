@@ -9,8 +9,6 @@
 
 - 👨‍💻 All of my projects are available at [binyammamo.tech](binyammamo.tech)
 
-- 📝 I regularly write articles on [medium.com](medium.com)
-
 - 📫 How to reach me **binyammamo01@gmail.com**
 
 - 📄 Know about my experiences [binyammamo.tech/resume](binyammamo.tech/resume)
