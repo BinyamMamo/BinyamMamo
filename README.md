@@ -26,7 +26,9 @@
 <p><img align="left" width="35%" src="https://github-readme-stats.vercel.app/api/top-langs?theme=transparent&hide_border=true&username=binyammamo&show_icons=true&locale=en&layout=compact" alt="binyammamo" /></p>
 <p><img align="right" width="60%" src="https://github-readme-streak-stats.herokuapp.com/?theme=transparent&hide_border=true&user=binyammamo&" alt="binyammamo" /></p>
 
-
-[![](https://leetcard.jacoblin.cool/BIN_01?theme=transparent&font=Fira%20Code&ext=activity)](https://leetcode.com/u/BIN_01/)
-
+<p align="center">
+  <a href="https://leetcode.com/u/BIN_01">
+  <img src="https://leetcard.jacoblin.cool/BIN_01?theme=transparent&font=Fira%20Code&ext=activity" />
+  </a>
+</p>
 <!-- <p>&nbsp;<img align="right" width="60%" src="https://github-readme-stats.vercel.app/api?username=binyammamo&show_icons=true&locale=en" alt="binyammamo" /></p> -->
