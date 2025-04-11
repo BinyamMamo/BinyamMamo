@@ -1,21 +1,22 @@
-[![MasterHead](https://user-images.githubusercontent.com/74038190/225813708-98b745f2-7d22-48cf-9150-083f1b00d6c9.gif)](https://rishavchanda.io)
-<h1 align="center">Hi 👋, I'm Binyam Mamo</h1>
-<h3 align="center">A passionate Software Engineering student from Ethiopia</h3>
+[![MasterHead](https://media.licdn.com/dms/image/v2/D4D16AQHr3am38VS1Xg/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1727264091404?e=1749686400&v=beta&t=zC5AAfKKMZrxEHSHFRpFGJio8LJD7_Y9lB_IQ2Qix4w)](https://rishavchanda.io)
+
+[//]: # (<h1 align="center">Hi 👋, I'm Binyam Mamo</h1>)
+[//]: # (<h3 align="center">A passionate Software Engineering student from Ethiopia</h3>)
 <img align="right" width="300" src="https://user-images.githubusercontent.com/74038190/216644497-1951db19-8f3d-4e44-ac08-8e9d7e0d94a7.gif">
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=binyammamo&label=Profile%20views&color=0e75b6&style=flat" alt="binyammamo" /> </p>
 
-- 🌱 I’m currently learning **ALX Full Stack Software Engineering**
+- 🟡 Pursuing **Computer Engineering BsC** at the **University of Dubai**
 
-- 👨‍💻 All of my projects are available at [binyammamo.tech](binyammamo.tech)
+- 👨‍💻 All of my projects are available at [binyammamo.tech/projects](binyammamo.tech/projects)
+
+- 📃 Know about my experiences [binyammamo.tech/resume](binyammamo.tech/resume)
 
 - 📫 How to reach me **binyammamo01@gmail.com**
 
-- 📄 Know about my experiences [binyammamo.tech/resume](binyammamo.tech/resume)
-
 <h3 align="left">📫 Connect with me:</h3>
 
-[![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white)](https://discord.gg/__bin01__) [![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?logo=Facebook&logoColor=white)](https://facebook.com/https://www.facebook.com/johnsenbetooromoo) [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/https://www.instagram.com/binyam3957) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://medium.com/@binyammamo01) [![TikTok](https://img.shields.io/badge/TikTok-%23000000.svg?logo=TikTok&logoColor=white)](https://tiktok.com/@https://www.tiktok.com/@biny3095) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/https://twitter.com/binyam) [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](#) 
+[<img height="30px" src="https://images.icon-icons.com/2530/PNG/512/gmail_button_icon_151848.png" />](mailto:binyammamo01@gmail.com) &nbsp; [<img height="30px" src="https://images.icon-icons.com/2530/PNG/512/whatsapp_button_icon_151832.png" />](https://wa.me/971568784063) &nbsp; [<img height="30px" src="https://images.icon-icons.com/2530/PNG/512/telegram_button_icon_151837.png" />](#) &nbsp; [<img height="30px" src="https://images.icon-icons.com/2530/PNG/512/linkedin_button_icon_151847.png" />](https://www.linkedin.com/in/binyammamo)
 
 <h3 align="left">🐍 Languages and Tools:</h3>
 
@@ -26,6 +27,6 @@
 <p><img align="right" width="60%" src="https://github-readme-streak-stats.herokuapp.com/?theme=transparent&hide_border=true&user=binyammamo&" alt="binyammamo" /></p>
 
 
-[![KnlnKS's LeetCode stats](https://leetcode-stats-six.vercel.app/?username=BIN_01&theme=dark)](https://github.com/KnlnKS/leetcode-stats)
+[![](https://leetcard.jacoblin.cool/BIN_01?theme=transparent&font=Fira%20Code&ext=activity)](https://leetcode.com/u/BIN_01/)
 
 <!-- <p>&nbsp;<img align="right" width="60%" src="https://github-readme-stats.vercel.app/api?username=binyammamo&show_icons=true&locale=en" alt="binyammamo" /></p> -->
