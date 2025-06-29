@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Determinants Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-item {
+            aspect-ratio: 1;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .nav-item.current {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #4facfe;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .nav-item.answered {
+            background: rgba(46, 213, 115, 0.8);
+            border-color: #2ed573;
+        }
+
+        .nav-item.correct {
+            background: rgba(46, 213, 115, 1);
+            border-color: #2ed573;
+        }
+
+        .nav-item.incorrect {
+            background: rgba(255, 118, 117, 0.8);
+            border-color: #ff7675;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading-indicator {
+            color: white;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .timer {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .option:hover:not(.disabled) {
+            background: #e3f2fd;
+            border-color: #4facfe;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #4facfe;
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
+            border-color: #2ed573;
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);
+        }
+
+        .option.incorrect {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            border-color: #ff7675;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-letter {
+            background: #dee2e6;
+            color: #495057;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter,
+        .option.correct .option-letter,
+        .option.incorrect .option-letter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .option-status {
+            margin-left: auto;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .option.correct .option-status,
+        .option.incorrect .option-status {
+            opacity: 1;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            border-left: 4px solid #4facfe;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .explanation.show {
+            opacity: 1;
+            max-height: 500px;
+        }
+
+        .explanation h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .explanation p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .results {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .results-text {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .results-details {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .results-breakdown {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .error {
+            background: #ff7675;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .quiz-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .question-nav {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .overlay.show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <h2>Health Quiz</h2>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="question-nav" id="questionNav">
+                <div class="loading-indicator">Loading questions...</div>
+            </div>
+            
+            <div class="stats">
+                <span id="answered">0 answered</span>
+                <span id="remaining">0 left</span>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="quiz-card" id="quizCard">
+                <div class="loading">
+                    <div>Loading quiz questions...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let questions = [];
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let startTime = Date.now();
+        let timerInterval;
+        let showingExplanation = false;
+
+        // Embedded questions data to avoid CORS issues
+        const questionsData = {"questions": [
+    {
+      "id": 1,
+      "question": "According to the socioecological model, which of the following best explains why a highly educated individual might still engage in unhealthy behaviors?",
+      "options": [
+        "Education always ensures healthy behavior",
+        "Environmental and social influences can override individual knowledge",
+        "Genetics completely determines behavior",
+        "Employment status has no influence on behavior"
+      ],
+      "correct": 1,
+      "explanation": "The socioecological model identifies complex levels and interrelationships that influence health. Even highly educated individuals may struggle with healthy behaviors due to environmental factors (lack of green space, unsafe neighborhoods) and social influences (peer pressure, community norms) that can override individual knowledge. Environmental and social determinants can create significant barriers to making healthy choices regardless of education level."
+    },
+    {
+      "id": 2,
+      "question": "Which health model suggests that a person's perception of disease severity influences their behavior change?",
+      "options": [
+        "Socioecological Model",
+        "Health Belief Model",
+        "Transtheoretical Model",
+        "Behaviorism Theory"
+      ],
+      "correct": 1,
+      "explanation": "The Health Belief Model explains how health behaviors are influenced by four key perceptions: perceived susceptibility, perceived seriousness of consequences (disease severity), perceived benefits of action, and perceived barriers. A person's belief about how serious a disease or condition is and its potential impact on their life directly influences their motivation to change behavior."
+    },
+    {
+      "id": 3,
+      "question": "A woman avoids public parks due to safety concerns in her neighborhood, reducing her physical activity. Which determinant is most at play?",
+      "options": [
+        "Genetic",
+        "Individual knowledge",
+        "Environmental",
+        "Cultural"
+      ],
+      "correct": 2,
+      "explanation": "This reflects environmental determinants - specifically the built environment. Safety concerns in public parks represent a geographical barrier within the environment that prevents physical activity. Environmental factors like safe neighborhoods and green spaces encourage physical activity, while unsafe environments act as barriers even when individuals understand the benefits of exercise."
+    },
+    {
+      "id": 4,
+      "question": "Despite knowing the dangers, a teenager smokes to fit in with friends. This scenario best reflects the influence of:",
+      "options": [
+        "Media",
+        "Peers",
+        "Religion",
+        "Genetics"
+      ],
+      "correct": 1,
+      "explanation": "This demonstrates the powerful impact of peer influence on health behaviors. The socioecological model identifies that friends and community norms significantly affect health opportunities and choices. Even when individuals know the risks, social pressure from peers can override individual knowledge, as the desire to fit in becomes a stronger motivator than health concerns."
+    },
+    {
+      "id": 5,
+      "question": "Which of the following is an example of epigenetics?",
+      "options": [
+        "A person inheriting blue eyes",
+        "Air pollution triggering gene changes passed to offspring",
+        "A dominant gene for height",
+        "A family history of heart disease"
+      ],
+      "correct": 1,
+      "explanation": "Epigenetics refers to chemical modifications that alter DNA without changing the nucleotide sequence, which can activate or repress gene expression. These changes are influenced by the environment and can be passed to offspring. Air pollution triggering gene changes that are inherited is a direct example of environmental factors causing epigenetic modifications that affect future generations."
+    },
+    {
+      "id": 6,
+      "question": "In the Stages of Change Model, which stage does someone say, 'Maybe I should think about quitting smoking'?",
+      "options": [
+        "Precontemplation",
+        "Contemplation",
+        "Preparation",
+        "Maintenance"
+      ],
+      "correct": 1,
+      "explanation": "The Contemplation stage is characterized by individuals considering making a change, often thinking 'Well... maybe'. This stage involves acknowledging the possibility of change without yet committing to specific steps. The phrase 'Maybe I should think about quitting smoking' indicates the person is weighing options but hasn't made a firm commitment to action."
+    },
+    {
+      "id": 7,
+      "question": "A health professional helps a client set specific, measurable steps toward losing weight. This reflects which behavior change plan element?",
+      "options": [
+        "Self-efficacy",
+        "Relapse prevention",
+        "Goal setting",
+        "Knowledge transfer"
+      ],
+      "correct": 2,
+      "explanation": "This demonstrates goal setting using SMART goals (Specific, Measurable, Attainable, Realistic, Time-bound). Setting specific, measurable steps directly aligns with structured goal-setting frameworks that are crucial for behavior change. While self-efficacy and relapse prevention are important, the direct action described is the formulation of structured objectives."
+    },
+    {
+      "id": 8,
+      "question": "A patient with diabetes cannot attend frequent check-ups due to living 3 hours from the nearest specialist. This best reflects:",
+      "options": [
+        "Sociocultural factor",
+        "Socioeconomic factor",
+        "Environmental determinant",
+        "Individual skill factor"
+      ],
+      "correct": 2,
+      "explanation": "This represents an environmental determinant - specifically geographical barriers within the built environment. Living 3 hours from the nearest specialist creates a physical access barrier to healthcare. Environmental factors include physical aspects of where people live that influence health opportunities and access to services, including healthcare accessibility."
+    },
+    {
+      "id": 9,
+      "question": "Which statement about health disparities is FALSE?",
+      "options": [
+        "They always result from genetics",
+        "They can be caused by systemic policies",
+        "Rural residents may face more health barriers",
+        "Race and ethnicity influence disparities"
+      ],
+      "correct": 0,
+      "explanation": "Health disparities are differences in health outcomes that result from systemic and avoidable social and economic practices and policies, not solely genetics. While genetics interact with environmental factors, health disparities are primarily driven by social, economic, geographic, and policy factors rather than genetic differences alone."
+    },
+    {
+      "id": 10,
+      "question": "Which scenario BEST shows the interaction of socioeconomic and environmental factors?",
+      "options": [
+        "A wealthy family living near a polluted industrial area",
+        "A marathon runner born with asthma",
+        "A vegetarian choosing to eat meat during holidays",
+        "A student choosing to skip PE class"
+      ],
+      "correct": 0,
+      "explanation": "This scenario demonstrates how socioeconomic status (wealth) intersects with environmental hazards (pollution). Despite having high income and resources, the family is exposed to environmental health risks due to their location. This shows that even high socioeconomic status doesn't negate environmental impacts, illustrating the complex interaction between different health determinants."
+    },
+    {
+      "id": 11,
+      "question": "During a pandemic, why might lower-income individuals experience higher infection rates?",
+      "options": [
+        "Genetics make them more susceptible",
+        "They often cannot work remotely or afford to isolate",
+        "They lack awareness of the disease",
+        "Vaccines are ineffective for lower-income groups"
+      ],
+      "correct": 1,
+      "explanation": "Socioeconomic status significantly impacts health outcomes during pandemics. Lower-income individuals often work in jobs requiring in-person presence, have less ability to physically distance, work from home, or take leave. These practical constraints imposed by their economic conditions increase exposure risk, regardless of their knowledge about disease prevention."
+    },
+    {
+      "id": 12,
+      "question": "A patient refuses a blood transfusion due to religious beliefs. This is an example of what determinant?",
+      "options": [
+        "Socioeconomic",
+        "Sociocultural",
+        "Environmental",
+        "Genetic"
+      ],
+      "correct": 1,
+      "explanation": "Religious beliefs are a clear example of sociocultural determinants that shape individuals' perceptions of health, illness, and treatment. Sociocultural factors encompass cultural norms, values, and beliefs, including religious beliefs, that influence health decisions and behaviors as part of the broader social environment."
+    },
+    {
+      "id": 13,
+      "question": "Which factor most strongly predicts health outcomes according to the Teague PPT?",
+      "options": [
+        "Age",
+        "Socioeconomic status",
+        "Gender",
+        "Race"
+      ],
+      "correct": 1,
+      "explanation": "Socioeconomic status (SES) has perhaps the most significant impact on health outcomes. SES encompasses income, education, and occupation, which profoundly influence access to health-promoting resources, quality healthcare, nutritious food, safe housing, and reduces stress from financial instability. Higher income and social status consistently link to better health outcomes."
+    },
+    {
+      "id": 14,
+      "question": "A city builds more bike lanes and pedestrian paths. Which public health principle is being applied?",
+      "options": [
+        "Health promotion",
+        "Genetic screening",
+        "Disease treatment",
+        "Individual behavior focus only"
+      ],
+      "correct": 0,
+      "explanation": "This exemplifies health promotion - actions designed to maintain current health or encourage a more desirable state of health. Building bike lanes and pedestrian paths modifies the built environment to encourage physical activity and promote healthier lifestyles at a community level, making healthy choices easier for entire populations."
+    },
+    {
+      "id": 15,
+      "question": "Which of these individuals has the highest health literacy?",
+      "options": [
+        "A person who reads about diseases but struggles to apply information",
+        "Someone who uses and evaluates health information for decisions",
+        "A doctor who ignores new research findings",
+        "A fitness coach who memorizes nutrition facts"
+      ],
+      "correct": 1,
+      "explanation": "Health literacy is the ability to read, understand, and act on health information. The individual who uses and evaluates health information for decisions demonstrates all three components: reading/understanding, critically evaluating (including identifying misinformation), and applying it to make informed decisions. This goes beyond mere knowledge to practical application."
+    },
+    {
+      "id": 16,
+      "question": "A person with high perseverance and self-belief quits smoking despite social pressure. Which individual factor contributed most?",
+      "options": [
+        "Knowledge",
+        "Attitude",
+        "Skill",
+        "Genetics"
+      ],
+      "correct": 1,
+      "explanation": "This scenario points to attitude, which includes perseverance and self-belief (self-efficacy). Mentally healthy people persevere and take on challenges with a positive outlook and sense of control. Self-efficacy - feeling competent to perform a specific task - is a key component of attitude that empowers individuals to act despite external challenges like social pressure."
+    },
+    {
+      "id": 17,
+      "question": "Which combination of factors might multiply health risks most significantly?",
+      "options": [
+        "High income + poor education",
+        "Low income + low education + poor environment",
+        "Good education + poor family support",
+        "High income + unhealthy diet"
+      ],
+      "correct": 1,
+      "explanation": "The combination of low income, low education, and poor environment represents a clustering of multiple negative social determinants of health. This synergistic effect means individuals face numerous health risks simultaneously - limited access to healthcare, nutritious food, safe housing, plus environmental hazards and lack of health literacy - creating amplified vulnerability."
+    },
+    {
+      "id": 18,
+      "question": "Why might the media increase risk behaviors even without explicit peer pressure?",
+      "options": [
+        "Media replaces personal choice",
+        "Media can normalize risky behaviors through frequent, subtle portrayals",
+        "Viewers only copy what they are directly told",
+        "Media is rarely influential in modern health behavior"
+      ],
+      "correct": 1,
+      "explanation": "Media can normalize risky behaviors through frequent, subtle portrayals. Repeated exposure to certain behaviors in media, even without direct commands, can make those behaviors seem common, acceptable, or desirable. This normalization process subtly shapes perceptions and attitudes over time, influencing choices without explicit peer pressure."
+    },
+    {
+      "id": 19,
+      "question": "An immigrant family struggles to find culturally appropriate health services. This barrier is most directly related to:",
+      "options": [
+        "Employment status",
+        "Sociocultural factors",
+        "Individual genetics",
+        "Technological limitations"
+      ],
+      "correct": 1,
+      "explanation": "This highlights sociocultural factors, which include cultural norms, values, practices, and language that influence health behaviors and access to services. Cultural barriers to healthcare access include language differences, unfamiliarity with healthcare systems, or lack of providers who understand cultural contexts and beliefs."
+    },
+    {
+      "id": 20,
+      "question": "A man adopts a Mediterranean diet after learning about its heart benefits and because his peers support healthy eating. This change reflects which combined determinants?",
+      "options": [
+        "Individual, sociocultural, and environmental",
+        "Genetic only",
+        "Environmental only",
+        "Individual and genetic only"
+      ],
+      "correct": 0,
+      "explanation": "This demonstrates multiple determinants: Individual (learning about heart benefits shows knowledge and health literacy), Sociocultural (peer support for healthy eating represents social influence), and Environmental (access to Mediterranean diet foods implies a supportive food environment). The socioecological model emphasizes that individual choices are made within social and physical contexts."
+    },
+    {
+      "id": 21,
+      "question": "A woman with type A blood (genotype AO) claims a man with type AB blood fathered her child, who has type B blood. Which statement is correct?",
+      "options": [
+        "This is genetically impossible",
+        "The child must be adopted",
+        "The claim is possible only if the mother is AO",
+        "The mother must have genotype AA"
+      ],
+      "correct": 2,
+      "explanation": "For a child with type B blood to be produced, they need genotype BO. The mother (AO) can pass either A or O allele, and the father (AB) can pass either A or B allele. If the mother passes O and father passes B, the child would have BO genotype (type B blood). This is only possible if the mother is heterozygous (AO), not homozygous (AA)."
+    },
+    {
+      "id": 22,
+      "question": "Two parents with the genotype Bb (black fur is dominant) produce offspring. Which probability is correct?",
+      "options": [
+        "All offspring will have black fur",
+        "25% chance for white fur offspring",
+        "75% of offspring will be white",
+        "All offspring will be heterozygous"
+      ],
+      "correct": 1,
+      "explanation": "Using a Punnett square for Bb × Bb: 25% BB (black), 50% Bb (black), 25% bb (white). Since black is dominant, any offspring with at least one B allele will have black fur. Only bb genotype (25%) will have white fur, as white is recessive and requires two recessive alleles."
+    },
+    {
+      "id": 23,
+      "question": "Which best explains why two tall pea plants might produce short offspring?",
+      "options": [
+        "Tall plants can only pass on dominant alleles",
+        "Both parents must be homozygous tall",
+        "Both parents carried a recessive allele for shortness",
+        "Shortness is a spontaneous mutation"
+      ],
+      "correct": 2,
+      "explanation": "For short offspring to be produced from tall parents, both parents must be heterozygous (Tt) and carry the recessive allele for shortness. If both pass their recessive 't' allele, the offspring will be tt (short). This follows typical Mendelian inheritance patterns where recessive traits can appear when both parents are carriers."
+    },
+    {
+      "id": 24,
+      "question": "In incomplete dominance, crossing two pink carnations (CR CW x CR CW) results in what phenotypic ratio?",
+      "options": [
+        "1 red : 2 pink : 1 white",
+        "3 pink : 1 white",
+        "All pink",
+        "2 red : 2 white"
+      ],
+      "correct": 0,
+      "explanation": "In incomplete dominance, the heterozygous phenotype is an intermediate blend. Crossing CR CW × CR CW produces: 25% CR CR (red), 50% CR CW (pink), 25% CW CW (white). This gives the classic 1:2:1 phenotypic ratio where the heterozygous genotype has its own distinct intermediate phenotype."
+    },
+    {
+      "id": 25,
+      "question": "If two heterozygous pea plants for yellow seeds (Yy) are crossed, what's the chance of an offspring being homozygous recessive (green seeds)?",
+      "options": [
+        "0%",
+        "25%",
+        "50%",
+        "75%"
+      ],
+      "correct": 1,
+      "explanation": "Crossing Yy × Yy produces: 25% YY (yellow), 50% Yy (yellow), 25% yy (green). The homozygous recessive genotype (yy) that produces green seeds occurs in 25% of offspring. This follows the standard 3:1 phenotypic ratio for a monohybrid cross."
+    },
+    {
+      "id": 26,
+      "question": "Which scenario best illustrates codominance?",
+      "options": [
+        "A pink flower resulting from a red x white cross",
+        "A flower with both red and white patches",
+        "Green peas resulting from two yellow parents",
+        "A tall plant crossed with a short plant producing medium height offspring"
+      ],
+      "correct": 1,
+      "explanation": "Codominance occurs when both alleles are fully expressed simultaneously in the heterozygous phenotype. A flower with both red and white patches shows both colors distinctly, demonstrating that both alleles are being expressed without blending. This differs from incomplete dominance where traits blend to create an intermediate phenotype."
+    },
+    {
+      "id": 27,
+      "question": "Two rabbits are crossed. One is heterozygous white (Bb), and the other is homozygous black (BB). Which is true?",
+      "options": [
+        "50% of the offspring will be black",
+        "All offspring will appear black",
+        "25% will be white",
+        "It depends on environmental factors only"
+      ],
+      "correct": 1,
+      "explanation": "Assuming black (B) is dominant over white (b), crossing Bb × BB produces 50% BB and 50% Bb offspring. Both genotypes result in black phenotype since B is dominant. Therefore, all offspring will appear black, regardless of whether they are homozygous (BB) or heterozygous (Bb)."
+    },
+    {
+      "id": 28,
+      "question": "In humans, a colorblind woman (XbXb) and a man with normal vision (XBY) have children. What percentage of their sons will be colorblind?",
+      "options": [
+        "0%",
+        "50%",
+        "100%",
+        "25%"
+      ],
+      "correct": 2,
+      "explanation": "This is X-linked inheritance. All sons inherit their X chromosome from their mother and Y chromosome from their father. Since the mother is XbXb, all sons will inherit Xb and be XbY (colorblind). Daughters will be XBXb (carriers with normal vision). Therefore, 100% of sons will be colorblind."
+    },
+    {
+      "id": 29,
+      "question": "Which cross would never produce a child with blood type O?",
+      "options": [
+        "AO x BO",
+        "AB x AB",
+        "AO x OO",
+        "BO x OO"
+      ],
+      "correct": 1,
+      "explanation": "To have blood type O, a child must have genotype OO (inherit O allele from each parent). In AB × AB cross, parents can only contribute A or B alleles, never O alleles. Therefore, offspring can only be AA, AB, or BB - never OO. All other crosses include at least one parent with an O allele."
+    },
+    {
+      "id": 30,
+      "question": "Why might phenotype ratios in actual offspring sometimes differ from expected Punnett square predictions?",
+      "options": [
+        "The laws of probability are always exact",
+        "Mutations and small sample sizes can cause variations",
+        "Genotypes change during the life of an organism",
+        "Dominant traits can randomly become recessive"
+      ],
+      "correct": 1,
+      "explanation": "Punnett squares predict probabilities, but real outcomes can vary due to: small sample sizes (like coin flips, small numbers may not match expected ratios), mutations (changes in genes that create unexpected phenotypes), and environmental factors that can influence gene expression. Probability applies to large numbers; small samples can deviate significantly."
+    },
+    {
+      "id": 31,
+      "question": "A man's BMI is calculated as 31.2 kg/m². According to international guidelines, he would be classified as:",
+      "options": [
+        "Normal weight",
+        "Overweight",
+        "Obese",
+        "Morbidly obese"
+      ],
+      "correct": 2,
+      "explanation": "BMI classifications: Underweight (<18.5), Normal (18.5-24.9), Overweight (25-29.9), Obese (≥30). A BMI of 31.2 falls in the obese category (30 or greater). Obesity is defined as body weight that greatly exceeds recommended guidelines and is associated with serious health problems."
+    },
+    {
+      "id": 32,
+      "question": "A male patient has a waist circumference of 106 cm. What can be inferred about his disease risk?",
+      "options": [
+        "Normal risk",
+        "Increased risk due to visceral fat",
+        "No risk if BMI is normal",
+        "Risk only if cholesterol is also elevated"
+      ],
+      "correct": 1,
+      "explanation": "Large abdominal circumference is associated with high cholesterol levels and higher risk for heart disease, stroke, diabetes, and hypertension. A waist circumference of 106 cm indicates increased visceral fat, which is metabolically active and releases inflammatory substances. This represents independent disease risk even if BMI is normal."
+    },
+    {
+      "id": 33,
+      "question": "Two parents are heterozygous for a recessive disorder (Aa × Aa). What is the probability their child will inherit the disorder?",
+      "options": [
+        "0%",
+        "25%",
+        "50%",
+        "75%"
+      ],
+      "correct": 1,
+      "explanation": "For a recessive disorder, a child must have genotype aa to express the disorder. Crossing Aa × Aa produces: 25% AA (unaffected), 50% Aa (carriers), 25% aa (affected). Therefore, there's a 25% probability the child will inherit the disorder."
+    },
+    {
+      "id": 34,
+      "question": "If a child inherits heterozygous (Yy) alleles for seed color, and yellow is dominant, what percentage of offspring from two heterozygous parents (Yy × Yy) will express the dominant phenotype?",
+      "options": [
+        "25%",
+        "50%",
+        "75%",
+        "100%"
+      ],
+      "correct": 2,
+      "explanation": "Crossing Yy × Yy produces: 25% YY (yellow), 50% Yy (yellow), 25% yy (green). Offspring expressing the dominant phenotype (yellow) include both YY and Yy genotypes. Therefore, 75% (25% + 50%) will express the dominant phenotype."
+    },
+    {
+      "id": 35,
+      "question": "A heterozygous tall plant (Tt) is crossed with a short plant (tt). What is the probability their offspring will be tall?",
+      "options": [
+        "0%",
+        "25%",
+        "50%",
+        "75%"
+      ],
+      "correct": 2,
+      "explanation": "This is a test cross: Tt × tt produces 50% Tt (tall) and 50% tt (short). Since tall (T) is dominant, offspring with Tt genotype will have tall phenotype. Therefore, 50% of offspring will be tall."
+    },
+    {
+      "id": 36,
+      "question": "An outbreak of salmonella occurs at a restaurant in Dubai. The investigation reveals contaminated lettuce as the source. Which epidemiological factor does the lettuce represent?",
+      "options": [
+        "Host",
+        "Agent",
+        "Environment",
+        "Determinant"
+      ],
+      "correct": 2,
+      "explanation": "In the epidemiological triangle: Agent (Salmonella bacteria), Host (people who got sick), Environment (factors that facilitate transmission). The contaminated lettuce is the vehicle through which the agent was transmitted, representing an environmental factor that contributed to the outbreak through indirect/foodborne transmission."
+    },
+    {
+      "id": 37,
+      "question": "A new virus spreads rapidly across several continents. This would be best classified as:",
+      "options": [
+        "Endemic",
+        "Cluster",
+        "Epidemic",
+        "Pandemic"
+      ],
+      "correct": 3,
+      "explanation": "A pandemic is a disease that spreads across regions or continents. Endemic diseases are constantly present in a population, clusters are localized groups of cases, and epidemics are disease occurrence in excess of expected levels in a specific area. A virus spreading rapidly across several continents fits the definition of a pandemic."
+    },
+    {
+      "id": 38,
+      "question": "Which of the following best explains why observational studies are commonly used in epidemiology rather than experimental studies?",
+      "options": [
+        "Experimental studies are faster",
+        "Observational studies are more accurate",
+        "It is often unethical to expose people to potential health risks",
+        "Observational studies do not require statistical analysis"
+      ],
+      "correct": 2,
+      "explanation": "The primary reason is ethical: it's highly unethical to deliberately expose people to potentially harmful substances just to study effects. Epidemiologists rely on observational studies to observe real-world exposures and work out connections between exposures and health outcomes without manipulating variables in potentially harmful ways."
+    },
+    {
+      "id": 39,
+      "question": "A researcher finds a statistically significant relationship between ice cream sales and drowning incidents. What concept explains why this relationship might not indicate causation?",
+      "options": [
+        "Determinant",
+        "Confounding variable",
+        "Distribution bias",
+        "Reverse causality"
+      ],
+      "correct": 1,
+      "explanation": "This is a classic example of a confounding variable - temperature/season. Both ice cream sales and drowning incidents increase in summer due to hot weather (the confounder). The heat causes people to buy more ice cream and swim more (leading to more drownings), creating an apparent link that is not causal."
+    },
+    {
+      "id": 40,
+      "question": "In the definition of epidemiology, which of the following BEST differentiates 'distribution' from 'determinants'?",
+      "options": [
+        "Distribution identifies causes; determinants describe frequency",
+        "Distribution covers who, when, and where; determinants explain why and how",
+        "Distribution studies single individuals; determinants apply only to large groups",
+        "Distribution and determinants are identical concepts"
+      ],
+      "correct": 1,
+      "explanation": "Distribution refers to the 'who, when, and where' aspects of disease patterns (describing age, location, time of occurrence). Determinants refer to the 'why and how' aspects (agents, causes, risk factors, control measures). Both are crucial - understanding patterns without knowing causes prevents intervention, and knowing causes without understanding patterns limits targeted action."
+    },
+    {
+      "id": 41,
+      "question": "An epidemiologist notices a sudden rise in lung cancer cases among non-smokers living near a factory. What should be the next step in investigating this potential public health issue?",
+      "options": [
+        "Close the factory immediately",
+        "Perform an experimental study exposing people to factory emissions",
+        "Conduct an observational study analyzing possible exposures and confounders",
+        "Assume the cancer increase is random"
+      ],
+      "correct": 2,
+      "explanation": "The appropriate epidemiological approach is to conduct an observational study analyzing possible exposures (factory emissions) and confounders. This involves measuring exposures in the population and working out connections between exposures and health outcomes while considering confounding variables. Experimental exposure would be unethical."
+    },
+    {
+      "id": 42,
+      "question": "Which of the following scenarios represents a cluster rather than an epidemic or endemic condition?",
+      "options": [
+        "Measles cases spread throughout an entire country over 6 months",
+        "15 employees at a single office develop food poisoning after a staff lunch",
+        "Malaria consistently occurs in specific regions of Africa",
+        "A flu outbreak covers several neighboring countries"
+      ],
+      "correct": 1,
+      "explanation": "A cluster is a group of cases in a specific time and place that might be more than expected. The food poisoning scenario represents a localized group of cases (15 employees, single office) at a specific time (after staff lunch). This fits the definition of a cluster - localized and time-specific, unlike widespread epidemics or consistently present endemic diseases."
+    },
+    {
+      "id": 43,
+      "question": "Which combination of study methods would best help confirm a causal link between an exposure and disease?",
+      "options": [
+        "High p-value + case reports",
+        "Low p-value + small sample size",
+        "Low p-value + large effect size in multiple studies",
+        "Observational data only"
+      ],
+      "correct": 2,
+      "explanation": "Confirming causation requires: low p-value (statistical significance - unlikely due to chance), large effect size (shows strength and importance of association), and consistency across multiple studies (replication strengthens evidence). This combination provides compelling evidence beyond just statistical significance alone."
+    },
+    {
+      "id": 44,
+      "question": "Why can a low p-value in a study sometimes be misleading when determining public health risks?",
+      "options": [
+        "It automatically proves causation",
+        "It does not account for the strength or importance of the effect size",
+        "It only applies to infectious diseases",
+        "It reflects bias in the research design"
+      ],
+      "correct": 1,
+      "explanation": "A low p-value only indicates statistical significance (results unlikely due to chance) but doesn't tell us how strong the association is or how important the health implications are. Effect size is crucial for understanding real-world importance. A statistically significant finding may have little practical significance if the effect size is small."
+    },
+    {
+      "id": 45,
+      "question": "Which public health practice directly applies epidemiological data to reduce illness in a population?",
+      "options": [
+        "Health surveillance",
+        "Statistical education",
+        "Randomized interviews",
+        "Clinical treatment of individual patients"
+      ],
+      "correct": 0,
+      "explanation": "Health surveillance is the ongoing systematic collection, analysis, and interpretation of health data used to plan, implement, and evaluate public health practices. Surveillance systems identify patterns (outbreaks, clusters) and inform interventions to reduce illness in populations, directly applying epidemiological principles to population health control."
+    },
+    {
+      "id": 46,
+      "question": "If two parents with blood types AB and AB have children, what percentage of their offspring could have blood type O?",
+      "options": [
+        "0%",
+        "25%",
+        "50%",
+        "75%"
+      ],
+      "correct": 0,
+      "explanation": "Parents with AB blood type have genotype AB (one A allele, one B allele). To have blood type O, a child needs genotype OO (two O alleles). Since neither parent carries an O allele, they cannot pass O alleles to offspring. Therefore, 0% of offspring could have blood type O."
+    },
+    {
+      "id": 47,
+      "question": "Which best explains why stem cells, while vital for tissue repair, pose a higher risk for cancer?",
+      "options": [
+        "They divide slowly and predictably",
+        "They are shielded from mutations",
+        "They can divide indefinitely and may accumulate mutations",
+        "They lack any DNA repair mechanisms"
+      ],
+      "correct": 2,
+      "explanation": "Stem cells can divide indefinitely without a predetermined number of divisions. Each cell division carries risk of mutations or DNA replication errors. Since stem cells have prolonged division capacity, they have higher cumulative chance of accumulating the 5-10 critical mutations typically required for a cell to become cancerous. Their indefinite division potential increases cancer risk."
+    },
+    {
+      "id": 48,
+      "question": "A tumor that grows slowly and does not invade nearby tissues is classified as:",
+      "options": [
+        "Malignant",
+        "Benign",
+        "Metastatic",
+        "Invasive"
+      ],
+      "correct": 1,
+      "explanation": "Benign tumors are characterized by slow growth and being unlikely to spread to surrounding tissues. Malignant tumors are capable of spreading to surrounding tissues (invasive) and can metastasize to distant sites. A slow-growing tumor that doesn't invade nearby tissues fits the definition of benign."
+    },
+    {
+      "id": 49,
+      "question": "Which best distinguishes Stage II cancer from Stage IV cancer?",
+      "options": [
+        "Stage II is always benign",
+        "Stage II is localized or locally advanced; Stage IV has metastasized to distant organs",
+        "Stage II has spread throughout the entire body",
+        "Stage IV is always curable"
+      ],
+      "correct": 1,
+      "explanation": "Cancer staging describes spread extent: Stage II is locally advanced (may involve nearby lymph nodes but hasn't spread to distant organs), while Stage IV has metastasized to distant sites like liver, bones, or lungs. Stage IV represents the most advanced stage with worst prognosis."
+    },
+    {
+      "id": 50,
+      "question": "Why does chemotherapy often lead to side effects like hair loss and nausea?",
+      "options": [
+        "It targets only cancer cells",
+        "It affects rapidly dividing cells, including healthy ones like hair follicles and stomach lining",
+        "It strengthens the immune system",
+        "It prevents all cell division"
+      ],
+      "correct": 1,
+      "explanation": "Chemotherapy kills rapidly dividing cancer cells but also affects rapidly dividing normal cells including hair follicles (causing hair loss), stomach lining (causing nausea), and white blood cells (compromising immune system). The non-specific targeting of rapidly dividing cells causes these side effects."
+    },
+    {
+      "id": 51,
+      "question": "Which cancer type originates from connective tissues such as bone, muscle, or fat?",
+      "options": [
+        "Carcinoma",
+        "Leukemia",
+        "Sarcoma",
+        "Lymphoma"
+      ],
+      "correct": 2,
+      "explanation": "Sarcomas arise in connective tissues (bone, tendon, cartilage, muscle, fat). Carcinomas arise from epithelial tissue, leukemias from blood/bone marrow, and lymphomas from lymph nodes/immune cells. Each cancer type is classified by its tissue of origin."
+    },
+    {
+      "id": 52,
+      "question": "A woman has a family history of breast cancer and begins screening earlier than general guidelines recommend. This reflects which concept?",
+      "options": [
+        "Universal screening",
+        "Risk-based screening",
+        "Overdiagnosis",
+        "Chemoprevention"
+      ],
+      "correct": 1,
+      "explanation": "Risk-based screening tailors screening frequency or age to individual risk factors. Family history increases cancer risk and alters screening recommendations, so starting earlier than general guidelines represents personalized screening based on elevated risk factors rather than universal population-based screening."
+    },
+    {
+      "id": 53,
+      "question": "What best explains why cancer screening programs aim for early detection?",
+      "options": [
+        "Early-stage cancers require no treatment",
+        "Early detection often improves treatment success and survival rates",
+        "Early detection prevents all metastasis",
+        "Early detection always eliminates the need for chemotherapy"
+      ],
+      "correct": 1,
+      "explanation": "Treatment is more successful the earlier cancer is identified. Early detection significantly increases survival rates (e.g., lung cancer 5-year survival increases from 22% overall to 60% if detected early). Early detection allows treatment before spread, increasing chances of successful treatment and cure."
+    },
+    {
+      "id": 54,
+      "question": "Which term describes cancer that has spread from its original site to distant organs?",
+      "options": [
+        "In situ",
+        "Localized",
+        "Metastatic",
+        "Benign"
+      ],
+      "correct": 2,
+      "explanation": "Metastasis is the process by which cancer cells spread from one part of the body to another. Cancer that has undergone this process is called metastatic. In situ means present only where it began, localized means confined to origin organ, and benign tumors don't spread."
+    },
+    {
+      "id": 55,
+      "question": "Which best distinguishes chemotherapy from biological therapies?",
+      "options": [
+        "Chemotherapy targets the immune system; biological therapies target cancer DNA",
+        "Chemotherapy affects the whole body; biological therapies aim to enhance the immune system's cancer-fighting ability",
+        "Biological therapies have more severe side effects than chemotherapy",
+        "Both only target healthy cells"
+      ],
+      "correct": 1,
+      "explanation": "Chemotherapy is systemic drug treatment affecting the whole body, killing rapidly dividing cells (both cancer and healthy). Biological therapies (immunotherapy) specifically aim to enhance the immune system's ability to fight cancer, representing a more targeted approach compared to chemotherapy's broad systemic effects."
+    },
+    {
+      "id": 56,
+      "question": "Which best distinguishes eustress from distress?",
+      "options": [
+        "Eustress is always harmful, while distress is always beneficial",
+        "Eustress is positive stress that promotes growth, while distress is negative and overwhelming",
+        "Both are equally harmful over time",
+        "Eustress occurs only in physical situations, distress in emotional ones"
+      ],
+      "correct": 1,
+      "explanation": "Eustress occurs when you appraise an event as positive, experiencing positive stress that can be motivating and promote growth (e.g., excitement about college). Distress occurs when you appraise events as negative, leading to overwhelming stress that can contribute to health problems."
+    },
+    {
+      "id": 57,
+      "question": "Which characteristic would best help an individual cope with a stressful life event by viewing it as a challenge rather than a threat?",
+      "options": [
+        "Pessimism",
+        "Hardiness",
+        "Type D personality",
+        "Low resilience"
+      ],
+      "correct": 1,
+      "explanation": "Hardiness is an effective coping style characterized by a tendency to view stressors as challenges rather than threats. Hardy individuals see stressful situations as manageable challenges and plan accordingly, demonstrating resilience and positive coping mechanisms."
+    },
+    {
+      "id": 58,
+      "question": "Which best differentiates acute stress from chronic stress?",
+      "options": [
+        "Acute stress has long-term harmful effects; chronic stress never affects health",
+        "Acute stress is short-term and often manageable, while chronic stress persists over time and can harm physical and mental health",
+        "Acute stress only affects the cardiovascular system, while chronic stress affects the immune system",
+        "Chronic stress leads to eustress"
+      ],
+      "correct": 1,
+      "explanation": "Acute stress is short-term and the body can handle it if it doesn't happen too often and recovery occurs afterward. Chronic stress continues without resolution, significantly increasing illness likelihood and weakening nearly every body system, including immune, cardiovascular, and mental health."
+    },
+    {
+      "id": 59,
+      "question": "Why are individuals with higher emotional intelligence better at managing stress?",
+      "options": [
+        "They avoid all stressful situations",
+        "They suppress emotions to prevent physiological changes",
+        "They recognize, manage, and respond to their emotions and the emotions of others effectively",
+        "They rely solely on rational thinking, avoiding emotional responses"
+      ],
+      "correct": 2,
+      "explanation": "Emotional intelligence involves recognizing, naming, and understanding emotions; managing emotions and controlling moods; motivating themselves; and recognizing/responding to others' emotions. This self-awareness, self-regulation, and social competence enables better stress management and healthier coping mechanisms."
+    },
+    {
+      "id": 60,
+      "question": "Which stage of the General Adaptation Syndrome (GAS) involves the body using energy to cope with continued stress without fully returning to homeostasis?",
+      "options": [
+        "Alarm",
+        "Resistance",
+        "Exhaustion",
+        "Recovery"
+      ],
+      "correct": 1,
+      "explanation": "The Resistance stage occurs when stress continues beyond the initial alarm reaction. The body uses energy to cope with continued stress but cannot return to homeostasis, maintaining high alertness while attempting to adapt to the stressor. If stress persists, this leads to the exhaustion stage."
+    },
+    {
+      "id": 61,
+      "question": "Which neurotransmitter imbalance is most commonly associated with mood disorders such as depression?",
+      "options": [
+        "Dopamine",
+        "Acetylcholine",
+        "Serotonin",
+        "GABA"
+      ],
+      "correct": 2,
+      "explanation": "Serotonin primarily regulates emotion and mood. Low serotonin levels are specifically linked to depression, problems with anger control, and concentration issues. While other neurotransmitters affect mental health, serotonin imbalance is most directly associated with mood disorders like depression."
+    },
+    {
+      "id": 62,
+      "question": "Which scenario best reflects resilience?",
+      "options": [
+        "An individual avoids all stressful situations to protect their mental health",
+        "A student faces academic failure but develops a new study plan and seeks help, eventually improving their grades",
+        "A person experiences a stressful event and withdraws socially for months",
+        "A worker suppresses emotions and refuses to talk about stress at work"
+      ],
+      "correct": 1,
+      "explanation": "Resilience is the ability to bounce back from adverse events. The student demonstrates resilience by facing adversity (academic failure), actively developing solutions (study plan), seeking support (help), and ultimately overcoming the challenge (improving grades). This shows adaptive coping and recovery."
+    },
+    {
+      "id": 63,
+      "question": "Which best explains the primary difference between panic disorder and generalized anxiety disorder (GAD)?",
+      "options": [
+        "Panic disorder involves constant worrying, while GAD involves sudden, intense fear",
+        "Panic disorder includes recurrent, unexpected panic attacks; GAD involves chronic, excessive worrying",
+        "Both conditions always result from traumatic events",
+        "GAD only occurs in social situations"
+      ],
+      "correct": 1,
+      "explanation": "Panic disorder is characterized by recurrent, unexpected panic attacks (sudden, intense fear without real danger). GAD involves excessive and uncontrollable worrying about routine matters, usually far out of proportion to the likelihood of feared events. The key difference is acute attacks versus chronic worry."
+    },
+    {
+      "id": 64,
+      "question": "Why might individuals with Type A personality patterns be at higher risk for stress-related illnesses?",
+      "options": [
+        "They typically avoid competition and challenges",
+        "Their calm approach reduces stress hormone levels",
+        "Their impulsive and highly competitive behaviors increase chronic stress responses",
+        "They experience less distress than other personality types"
+      ],
+      "correct": 2,
+      "explanation": "Type A behavior patterns include impulsive, achievement-oriented, and highly competitive characteristics. These behaviors can lead to chronic stress as individuals constantly push themselves, perceive more situations as demanding, and react intensely to stressors, increasing risk of stress-related illnesses."
+    },
+    {
+      "id": 65,
+      "question": "Which best distinguishes positive psychology from traditional approaches to mental health?",
+      "options": [
+        "Positive psychology focuses only on curing mental illnesses",
+        "Positive psychology emphasizes building strengths, virtues, and happiness, rather than solely treating disorders",
+        "Traditional psychology ignores the role of emotions",
+        "Positive psychology avoids discussing emotional intelligence"
+      ],
+      "correct": 1,
+      "explanation": "Positive psychology focuses on positive emotions, characteristics, strengths, and conditions that create happiness through virtues like wisdom, courage, humanity, justice, temperance, and transcendence. This contrasts with traditional approaches that primarily focused on diagnosing and treating mental disorders."
+    },
+    {
+      "id": 66,
+      "question": "Which best explains why dietary supplements are not always reliable despite being sold legally?",
+      "options": [
+        "They are pre-approved for safety before sale",
+        "They are completely regulated like prescription drugs",
+        "The FDA monitors them only after they enter the market and only if issues arise",
+        "They must pass extensive human trials before being sold"
+      ],
+      "correct": 2,
+      "explanation": "Dietary supplements fall into a category that is not effectively regulated unless problems arise. The FDA's role begins largely after products enter the marketplace, unlike prescription drugs which require pre-market approval. Manufacturers don't need to submit safety/efficacy proof before sale."
+    },
+    {
+      "id": 67,
+      "question": "Why might a female endurance athlete who avoids dairy products be at higher risk for stress fractures?",
+      "options": [
+        "Low calcium intake can weaken bones and increase fracture risk",
+        "Avoiding dairy reduces hydration levels",
+        "Dairy avoidance always causes muscle cramps",
+        "Dairy contains protein that prevents fractures"
+      ],
+      "correct": 0,
+      "explanation": "Calcium deficiency increases risk of stress fractures. Dairy products are a primary calcium source essential for building bones and teeth. Restriction of dairy products by women is problematic because calcium deficiency can lead to irregular menstruation, severe bone loss, osteoporosis, and increased stress fracture risk."
+    },
+    {
+      "id": 68,
+      "question": "Which combination of nutrients is most appropriate immediately after intense exercise to promote muscle recovery?",
+      "options": [
+        "High fat and fiber",
+        "Carbohydrate to protein in a 3:1 or 4:1 ratio",
+        "Low carbohydrate and high protein only",
+        "Pure protein with no carbohydrate"
+      ],
+      "correct": 1,
+      "explanation": "For optimal recovery, a carbohydrate to protein rich meal in 3:1 or 4:1 ratio within 2 hours is recommended. Carbohydrates replenish glycogen stores needed for energy recovery, while protein provides essential amino acids for muscle and tissue repair after exercise."
+    },
+    {
+      "id": 69,
+      "question": "Which factor makes ephedrine especially dangerous as a sports supplement?",
+      "options": [
+        "It lowers heart rate dangerously",
+        "It raises heart rate and blood pressure, increasing risks of seizures and psychosis",
+        "It has no side effects at all",
+        "It prevents muscle breakdown effectively"
+      ],
+      "correct": 1,
+      "explanation": "Ephedrine is a CNS stimulant that increases heart rate and blood pressure. Its serious side effects include GI distress, dizziness, headache, seizure, and psychosis. The cardiovascular and neurological risks make it particularly dangerous as a performance enhancing substance."
+    },
+    {
+      "id": 70,
+      "question": "Which best differentiates anabolic steroids from human growth hormone (HGH) in healthy individuals?",
+      "options": [
+        "Both equally increase strength in healthy people",
+        "Anabolic steroids improve muscle mass but carry severe side effects; HGH generally does not increase strength in healthy individuals",
+        "HGH always boosts endurance more than steroids",
+        "Anabolic steroids are safer than HGH"
+      ],
+      "correct": 1,
+      "explanation": "Anabolic steroids can improve muscle mass but carry severe side effects including liver dysfunction, reproductive hormone changes, and psychological effects. HGH can improve strength in deficient people but has no effect on strength in healthy individuals, making it ineffective for performance enhancement in healthy athletes."
+    },
+    {
+      "id": 71,
+      "question": "Why are creatine users advised to increase their fluid intake?",
+      "options": [
+        "To promote fat loss",
+        "To prevent dehydration and maintain safe kidney function",
+        "To enhance the effects of creatine on bone density",
+        "To reduce the chance of muscle tremors"
+      ],
+      "correct": 1,
+      "explanation": "Creatine causes weight gain due to increased muscle water retention. Since creatine draws water into muscle cells, athletes using creatine must drink adequate fluids to prevent dehydration and maintain safe kidney function as the body's water balance shifts."
+    },
+    {
+      "id": 72,
+      "question": "What is the primary danger of using insulin as a performance-enhancing drug (PED) in healthy athletes?",
+      "options": [
+        "It causes excessive fat gain",
+        "It can lead to hypoglycemia, coma, and death",
+        "It always improves muscle endurance",
+        "It boosts testosterone to unsafe levels"
+      ],
+      "correct": 1,
+      "explanation": "Insulin's physiological role is to lower blood glucose. In healthy individuals who don't have diabetes, administering insulin can lead to dangerously low blood sugar (hypoglycemia), which can rapidly progress to coma and be fatal if not treated promptly. This makes insulin extremely dangerous as a PED."
+    },
+    {
+      "id": 73,
+      "question": "Which best explains why caffeine can improve endurance performance but may also be risky?",
+      "options": [
+        "It decreases energy availability while increasing focus",
+        "It increases epinephrine, enhancing endurance, but can cause side effects like nausea and palpitations",
+        "It promotes muscle protein breakdown",
+        "It guarantees muscle mass gain"
+      ],
+      "correct": 1,
+      "explanation": "Caffeine is a CNS stimulant that increases epinephrine levels, which can enhance endurance performance (3-6 mg/kg one hour before exercise). However, it can cause side effects including diuresis, nausea, muscle tremor, palpitations, and headache, making it potentially risky despite performance benefits."
+    },
+    {
+      "id": 74,
+      "question": "Which strategy would best help an athlete choose a safe and effective dietary supplement?",
+      "options": [
+        "Buy products with exaggerated performance claims",
+        "Select supplements endorsed by professional athletes only",
+        "Choose products with the USP or ConsumerLab seal of approval",
+        "Prioritize supplements that promise instant results"
+      ],
+      "correct": 2,
+      "explanation": "Due to lack of effective regulation, consumers should choose products with USP (United States Pharmacopeia) labels or ConsumerLab seal of approval. These third-party certifications help ensure quality and safety. Athletes should avoid exaggerated claims and products that sound too good to be true."
+    },
+    {
+      "id": 75,
+      "question": "Why is the ATP system insufficient for prolonged exercise?",
+      "options": [
+        "ATP is not used for endurance activities",
+        "Only small amounts of ATP are stored in resting cells, requiring other energy sources for extended activity",
+        "ATP is only produced from supplements",
+        "ATP production stops during exercise"
+      ],
+      "correct": 1,
+      "explanation": "ATP is the body's chemical energy for muscle contractions, but only small amounts are stored in resting cells. For prolonged activity, other energy sources (breakdown of carbohydrates and fats) are needed to generate more ATP. This limitation requires sustained energy production from macronutrients."
+    },
+    {
+      "id": 76,
+      "question": "Which best distinguishes a performance-enhancing drug (PED) from a standard sports supplement?",
+      "options": [
+        "PEDs have no side effects",
+        "PEDs are always safe and legal",
+        "PEDs aim to directly alter hormones or physiological functions beyond normal levels, often carrying significant risks",
+        "Standard supplements never improve performance"
+      ],
+      "correct": 2,
+      "explanation": "PEDs (like anabolic steroids, HGH, insulin) directly alter physiological processes and hormone levels beyond normal ranges, carrying severe health risks and side effects. Standard sports supplements aim to support normal physiological functions with generally lower risk profiles, even if effectiveness varies."
+    },
+    {
+      "id": 77,
+      "question": "Why might excessive protein intake fail to benefit an endurance athlete?",
+      "options": [
+        "Protein cannot be used for muscle repair",
+        "The body converts excess protein to fat or excretes it without improving performance",
+        "Protein blocks carbohydrate absorption",
+        "High protein diets always increase endurance"
+      ],
+      "correct": 1,
+      "explanation": "While protein is essential for muscle repair, excessive protein has not been shown to be beneficial. The body cannot store excess protein as muscle; instead, it converts extra amino acids to glucose or fat for energy/storage, or excretes nitrogen, without contributing to enhanced endurance performance."
+    },
+    {
+      "id": 78,
+      "question": "Which best explains why athletes are advised to limit trans fats in their diets?",
+      "options": [
+        "Trans fats directly increase endurance",
+        "Trans fats improve muscle mass but impair flexibility",
+        "Trans fats increase cardiovascular disease risk without providing performance benefits",
+        "Trans fats are essential for post-workout recovery"
+      ],
+      "correct": 2,
+      "explanation": "Trans fats are bad for heart health as they raise LDL (bad cholesterol) and lower HDL (good cholesterol) levels, increasing cardiovascular disease risk. They offer no performance benefits for athletes, so limiting them supports cardiovascular health without compromising athletic performance."
+    }
+  ]};
+        // Load questions from embedded data
+        function loadQuestions() {
+            try {
+                questions = questionsData.questions;
+                if (!questions || questions.length === 0) {
+                    showError('No quiz questions found. Please add questions to the questionsData object.');
+                    return;
+                }
+                initQuiz();
+            } catch (error) {
+                showError('Failed to load quiz questions. Please refresh the page.');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('quizCard').innerHTML = `
+                <div class="error">${message}</div>
+                <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+            `;
+        }
+
+        function initQuiz() {
+            if (questions.length === 0) return;
+            
+            createQuestionNav();
+            showQuestion();
+            updateProgress();
+            startTimer();
+        }
+
+        function createQuestionNav() {
+            const nav = document.getElementById('questionNav');
+            nav.innerHTML = '';
+            
+            for (let i = 0; i < questions.length; i++) {
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+                navItem.textContent = i + 1;
+                navItem.onclick = () => goToQuestion(i);
+                nav.appendChild(navItem);
+            }
+            
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                item.classList.remove('current', 'answered', 'correct', 'incorrect');
+                
+                if (index === currentQuestion) {
+                    item.classList.add('current');
+                } else if (userAnswers[index] !== undefined) {
+                    const isCorrect = userAnswers[index] === questions[index].correct;
+                    item.classList.add('answered', isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+        }
+
+        function renderQuizCardSkeleton() {
+            document.getElementById('quizCard').innerHTML = `
+                <div class="question-header">
+                    <div class="question-number" id="questionNumber"></div>
+                    <div class="timer" id="timer"></div>
+                </div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+                <div class="controls">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next</button>
+                </div>
+            `;
+        }
+
+        function showQuestion() {
+            if (!questions[currentQuestion]) return;
+            renderQuizCardSkeleton();
+            const question = questions[currentQuestion];
+            showingExplanation = false;
+            
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                
+                const isSelected = userAnswers[currentQuestion] === index;
+                const isAnswered = userAnswers[currentQuestion] !== undefined;
+                const isCorrect = index === question.correct;
+                const isUserAnswer = userAnswers[currentQuestion] === index;
+                
+                if (isAnswered) {
+                    optionElement.classList.add('disabled');
+                    if (isCorrect) {
+                        optionElement.classList.add('correct');
+                    } else if (isUserAnswer) {
+                        optionElement.classList.add('incorrect');
+                    }
+                } else if (isSelected) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.onclick = () => {
+                    if (!isAnswered) {
+                        selectOption(index);
+                    }
+                };
+                
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div style="flex: 1;">${option}</div>
+                    <div class="option-status">
+                        ${isAnswered && isCorrect ? '✓' : ''}
+                        ${isAnswered && isUserAnswer && !isCorrect ? '✗' : ''}
+                    </div>
+                `;
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Add explanation if question is answered
+            if (userAnswers[currentQuestion] !== undefined) {
+                const explanationElement = document.createElement('div');
+                explanationElement.className = 'explanation show';
+                explanationElement.innerHTML = `
+                    <h4>Explanation:</h4>
+                    <p>${question.explanation}</p>
+                `;
+                optionsContainer.appendChild(explanationElement);
+                showingExplanation = true;
+            }
+            
+            updateControls();
+            updateNavigation();
+        }
+
+        function selectOption(index) {
+            if (userAnswers[currentQuestion] !== undefined) return;
+            
+            userAnswers[currentQuestion] = index;
+            const question = questions[currentQuestion];
+            
+            // Show immediate feedback
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                option.classList.add('disabled');
+                option.onclick = null;
+                
+                if (i === question.correct) {
+                    option.classList.add('correct');
+                    option.querySelector('.option-status').textContent = '✓';
+                } else if (i === index) {
+                    option.classList.add('incorrect');
+                    option.querySelector('.option-status').textContent = '✗';
+                }
+            });
+            
+            // Show explanation
+            const optionsContainer = document.getElementById('options');
+            const explanationElement = document.createElement('div');
+            explanationElement.className = 'explanation';
+            explanationElement.innerHTML = `
+                <h4>Explanation:</h4>
+                <p>${question.explanation}</p>
+            `;
+            optionsContainer.appendChild(explanationElement);
+            
+            // Animate explanation appearance
+            setTimeout(() => {
+                explanationElement.classList.add('show');
+                showingExplanation = true;
+            }, 300);
+            
+            updateProgress();
+            updateNavigation();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function goToQuestion(index) {
+            currentQuestion = index;
+            showQuestion();
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Finish Quiz';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(userAnswers).length;
+            const progress = (answered / questions.length) * 100;
+            
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('answered').textContent = `${answered} answered`;
+            document.getElementById('remaining').textContent = `${questions.length - answered} left`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('timer').textContent = `⏱️ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            
+            let correct = 0;
+            const breakdown = {};
+            
+            questions.forEach((question, index) => {
+                const isCorrect = userAnswers[index] === question.correct;
+                if (isCorrect) correct++;
+                
+                breakdown[`Question ${index + 1}`] = isCorrect ? 'Correct ✓' : 'Incorrect ✗';
+            });
+            
+            const percentage = Math.round((correct / questions.length) * 100);
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            
+            let resultText = '';
+            let resultColor = '';
+            
+            if (percentage >= 90) {
+                resultText = 'Excellent! Outstanding knowledge of health determinants!';
+                resultColor = '#2ed573';
+            } else if (percentage >= 80) {
+                resultText = 'Great job! You have a solid understanding.';
+                resultColor = '#ffa726';
+            } else if (percentage >= 70) {
+                resultText = 'Good work! Keep studying to improve further.';
+                resultColor = '#ff7675';
+            } else {
+                resultText = 'Keep learning! Review the material and try again.';
+                resultColor = '#fd79a8';
+            }
+            
+            const breakdownHTML = Object.entries(breakdown)
+                .map(([q, result]) => `<div class="breakdown-item"><span>${q}</span><span>${result}</span></div>`)
+                .join('');
+            
+            document.getElementById('quizCard').innerHTML = `
+                <div class="results">
+                    <div class="score-circle" style="background: ${resultColor}">
+                        <div class="score-number">${percentage}%</div>
+                        <div class="score-label">Score</div>
+                    </div>
+                    <div class="results-text">${resultText}</div>
+                    <div class="results-details">
+                        You answered ${correct} out of ${questions.length} questions correctly.<br>
+                        Time taken: ${minutes}:${seconds.toString().padStart(2, '0')}
+                    </div>
+                    <div class="results-breakdown">
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Question Breakdown:</h3>
+                        ${breakdownHTML}
+                    </div>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button class="btn btn-secondary" onclick="reviewAnswers()">Review Answers</button>
+                        <button class="btn btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function reviewAnswers() {
+            currentQuestion = 0;
+            document.getElementById('quizCard').innerHTML = `
+                <div class="question-header">
+                    <div class="question-number" id="questionNumber">Question 1 of ${questions.length}</div>
+                    <div class="timer" id="timer">⏱️ Review Mode</div>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="options" id="options"></div>
+                
+                <div class="controls">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+                    <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()">Next</button>
+                    <button class="btn btn-primary" onclick="showResults()">Back to Results</button>
+                </div>
+            `;
+            showQuestion();
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            startTime = Date.now();
+            clearInterval(timerInterval);
+            showingExplanation = false;
+            
+            document.getElementById('quizCard').innerHTML = `
+                <div class="question-header">
+                    <div class="question-number" id="questionNumber">Question 1 of ${questions.length}</div>
+                    <div class="timer" id="timer">⏱️ 0:00</div>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="options" id="options"></div>
+                
+                <div class="controls">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next</button>
+                </div>
+            `;
+            
+            initQuiz();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Initialize quiz when page loads
+        window.onload = loadQuestions;
+
+        // Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentQuestion > 0) {
+                previousQuestion();
+            } else if (e.key === 'ArrowRight' && currentQuestion < questions.length - 1) {
+                nextQuestion();
+            } else if (e.key >= '1' && e.key <= '4' && userAnswers[currentQuestion] === undefined) {
+                const optionIndex = parseInt(e.key) - 1;
+                if (optionIndex < questions[currentQuestion]?.options.length) {
+                    selectOption(optionIndex);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
