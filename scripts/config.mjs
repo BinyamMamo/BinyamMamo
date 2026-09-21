@@ -5,11 +5,7 @@ export const profile = {
   github: 'BinyamMamo',
   leetcode: 'BIN_01',
   site: 'binyammamo.vercel.app',
-  facts: [
-    'Computer Engineering, University of Dubai',
-    'APIs, data and the apps on top of them',
-    'Dubai, UAE',
-  ],
+  fact: 'Computer Engineering, University of Dubai  ·  Dubai, UAE',
 };
 
 export const skills = [
@@ -19,16 +15,23 @@ export const skills = [
   { group: 'Infrastructure', items: ['docker:Docker', 'kubernetes:Kubernetes', 'nginx:Nginx', 'linux:Linux', 'git:Git'] },
 ];
 
-/** GitHub palette, so the cards sit naturally on the profile. */
-export const theme = {
-  bg: '#0d1117',
-  border: '#30363d',
-  text: '#e6edf3',
-  muted: '#8b949e',
-  dim: '#6e7681',
-  accent: '#39d353',
-  blue: '#58a6ff',
-  levels: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
-  font: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
+/** GitHub's own palettes, so the cards sit on the profile in either theme. */
+export const palette = {
+  light: {
+    fg: '#1f2328', muted: '#59636e', dim: '#818b98', rule: '#d1d9e0', track: '#d1d9e0',
+    accent: '#1a7f37', blue: '#0969da',
+    cells: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+  },
+  dark: {
+    fg: '#e6edf3', muted: '#9198a1', dim: '#7d8590', rule: '#30363d', track: '#21262d',
+    accent: '#3fb950', blue: '#4493f8',
+    cells: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
+  },
+};
+
+export const fonts = {
+  sans: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
   mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
 };
+
+export const leetcodeBrand = '#ffa116';
