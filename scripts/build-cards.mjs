@@ -126,12 +126,29 @@ function styleBlock() {
     `@media (prefers-color-scheme:dark){${rules(palette.dark)}.only-dark{display:inline}.only-light{display:none}}</style>`;
 }
 
-function svg(w, h, body, title, defs = '') {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none" role="img" aria-label="${escape(title)}">
+const PAD_X = 22;
+const PAD_Y = 18;
+
+/** A faint gradient behind a card, one tone per colour scheme; far quieter than the banner. */
+const PANEL_DEFS = `<linearGradient id="panelLight" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f6f8fa"/><stop offset="1" stop-color="#eef3f0"/>
+  </linearGradient>
+  <linearGradient id="panelDark" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#11161d"/><stop offset="1" stop-color="#0f1714"/>
+  </linearGradient>`;
+const PANEL_STYLE = '<style>.panel{fill:url(#panelLight)}@media (prefers-color-scheme:dark){.panel{fill:url(#panelDark)}}</style>';
+
+function svg(w, h, body, title, defs = '', { panel = false } = {}) {
+  const outerW = panel ? w + PAD_X * 2 : w;
+  const outerH = panel ? h + PAD_Y * 2 : h;
+  const content = panel
+    ? `<rect width="${outerW}" height="${outerH}" rx="12" class="panel"/>\n<g transform="translate(${PAD_X} ${PAD_Y})">${body}</g>`
+    : body;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${outerW}" height="${outerH}" viewBox="0 0 ${outerW} ${outerH}" fill="none" role="img" aria-label="${escape(title)}">
 <title>${escape(title)}</title>
-${styleBlock()}
-<defs>${defs}</defs>
-${body}
+${styleBlock()}${panel ? PANEL_STYLE : ''}
+<defs>${panel ? PANEL_DEFS : ''}${defs}</defs>
+${content}
 </svg>
 `;
 }
@@ -140,59 +157,58 @@ const W = 1200;
 
 /* Cards */
 
-/** A gradient panel carrying the real contribution grid, dissolving toward the name. */
+/** A dark gradient panel carrying the real contribution grid, dissolving toward the name. */
 function banner(gh) {
-  const h = 210;
-  const cell = 12;
+  const w = W + PAD_X * 2;
+  const h = 170;
+  const cell = 11;
   const gap = 4;
-  const weeks = gh.weeks.slice(-26);
+  const weeks = gh.weeks.slice(-30);
   const gridW = weeks.length * (cell + gap) - gap;
-  const gridX = W - 28 - gridW;
+  const gridX = w - 30 - gridW;
   const gridY = Math.round((h - (7 * (cell + gap) - gap)) / 2);
 
-  // Brighter than the page palette, because these sit on a dark gradient in both themes.
-  const tones = ['#18351f', '#1f5c34', '#2ea043', '#46d160', '#68e58a'];
+  // GitHub's own dark contribution greens, slightly dimmed so the panel stays quiet.
+  const tones = ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'];
   let grid = '';
   weeks.forEach((week, wi) => {
     week.contributionDays.forEach((day) => {
       const row = new Date(day.date).getUTCDay();
-      grid += `<rect x="${gridX + wi * (cell + gap)}" y="${gridY + row * (cell + gap)}" width="${cell}" height="${cell}" rx="2.5" fill="${tones[level(day.contributionCount)]}">
-  <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="${(wi * 0.02).toFixed(2)}s"/></rect>`;
+      grid += `<rect x="${gridX + wi * (cell + gap)}" y="${gridY + row * (cell + gap)}" width="${cell}" height="${cell}" rx="2.5" fill="${tones[level(day.contributionCount)]}" opacity="0.9">
+  <animate attributeName="opacity" values="0;0.9" keyTimes="0;1" dur="0.5s" begin="${(wi * 0.02).toFixed(2)}s"/></rect>`;
     });
   });
 
   const defs = `<linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#0b2b21"/>
-    <stop offset="0.45" stop-color="#0d3b2e"/>
-    <stop offset="1" stop-color="#0a2d3a"/>
+    <stop offset="0" stop-color="#0d1117"/>
+    <stop offset="0.55" stop-color="#0f1a17"/>
+    <stop offset="1" stop-color="#0c1520"/>
   </linearGradient>
-  <radialGradient id="glow" cx="0.78" cy="0.35" r="0.65">
-    <stop offset="0" stop-color="#39d353" stop-opacity="0.22"/>
-    <stop offset="1" stop-color="#39d353" stop-opacity="0"/>
+  <radialGradient id="glow" cx="0.8" cy="0.3" r="0.6">
+    <stop offset="0" stop-color="#2ea043" stop-opacity="0.10"/>
+    <stop offset="1" stop-color="#2ea043" stop-opacity="0"/>
   </radialGradient>
-  <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
-    <circle cx="1.5" cy="1.5" r="1.4" fill="#ffffff" opacity="0.06"/>
+  <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+    <circle cx="1.5" cy="1.5" r="1.2" fill="#ffffff" opacity="0.045"/>
   </pattern>
   <linearGradient id="dissolve" x1="0" x2="1">
     <stop offset="0" stop-color="#000"/>
-    <stop offset="0.42" stop-color="#5a5a5a"/>
-    <stop offset="0.75" stop-color="#e8e8e8"/>
+    <stop offset="0.45" stop-color="#555"/>
+    <stop offset="0.8" stop-color="#e6e6e6"/>
     <stop offset="1" stop-color="#fff"/>
   </linearGradient>
   <mask id="fadeLeft"><rect x="${gridX}" y="0" width="${gridW}" height="${h}" fill="url(#dissolve)"/></mask>`;
 
-  return svg(W, h, `
-<rect x="0" y="0" width="${W}" height="${h}" rx="14" fill="url(#panel)"/>
-<rect x="0" y="0" width="${W}" height="${h}" rx="14" fill="url(#glow)"/>
-<rect x="0" y="0" width="${W}" height="${h}" rx="14" fill="url(#dots)"/>
+  return svg(w, h, `
+<rect width="${w}" height="${h}" rx="12" fill="url(#panel)"/>
+<rect width="${w}" height="${h}" rx="12" fill="url(#glow)"/>
+<rect width="${w}" height="${h}" rx="12" fill="url(#dots)"/>
+<rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" rx="11.5" stroke="#30363d" stroke-opacity="0.6"/>
 <g mask="url(#fadeLeft)">${grid}</g>
-<rect x="36" y="36" width="56" height="3" rx="1.5" fill="#39d353">
-  <animate attributeName="width" values="0;56" keyTimes="0;1" dur="1s"/>
-</rect>
-<text x="36" y="96" font-family="${fonts.sans}" font-size="40" font-weight="700" fill="#f0f6fc">${escape(profile.name)}</text>
-<text x="36" y="125" font-family="${fonts.sans}" font-size="16.5" fill="#7ee2a8">${escape(profile.role)}</text>
-<text x="36" y="153" font-family="${fonts.mono}" font-size="12.5" fill="#c3d0d9" opacity="0.85">${escape(profile.fact)}</text>
-<text x="36" y="178" font-family="${fonts.mono}" font-size="13" fill="#e6edf3" opacity="0.9">${escape(profile.site)} &#8599;</text>`,
+<text x="36" y="66" font-family="${fonts.sans}" font-size="38" font-weight="700" fill="#f0f6fc">${escape(profile.name)}</text>
+<text x="36" y="94" font-family="${fonts.sans}" font-size="16" fill="#7ee787">${escape(profile.role)}</text>
+<text x="36" y="120" font-family="${fonts.mono}" font-size="12.5" fill="#9198a1">${escape(profile.fact)}</text>
+<text x="36" y="142" font-family="${fonts.mono}" font-size="12.5" fill="#c9d1d9">${escape(profile.site)} &#8599;</text>`,
     `${profile.name}, ${profile.role}`, defs);
 }
 
@@ -214,7 +230,7 @@ function skillsCard() {
     if (i < skills.length - 1) body += `<rect x="8" y="${y + 38}" width="${W - 16}" height="1" class="rule" opacity="0.7"/>`;
   });
 
-  return svg(W, h, body, 'Backend, data, frontend and infrastructure tools');
+  return svg(W, h, body, 'Backend, database, frontend and infrastructure tools', '', { panel: true });
 }
 
 /** A number with its label beside it, the way GitHub writes counts. */
@@ -261,7 +277,7 @@ function contributionsCard(gh) {
     x += textWidth(value, 21) + textWidth(label, 13) + 44;
   }
 
-  return svg(W, h, `${statBlock}${months}${cells}`, `${gh.total} GitHub contributions in the past year`);
+  return svg(W, h, `${statBlock}${months}${cells}`, `${gh.total} GitHub contributions in the past year`, '', { panel: true });
 }
 
 function leetcodeCard(lc) {
@@ -319,7 +335,7 @@ ${stat(38, 34, solved, 'problems solved on LeetCode')}
     chart += `<text x="${x + bw / 2}" y="${chartY + chartH + 18}" text-anchor="middle" font-family="${fonts.mono}" font-size="10.5" class="dim">${bucket.label[0]}</text>`;
   });
 
-  return svg(W, h, body + chart, `${lc.solved.All} problems solved on LeetCode`);
+  return svg(W, h, body + chart, `${lc.solved.All} problems solved on LeetCode`, '', { panel: true });
 }
 
 /* Run */
