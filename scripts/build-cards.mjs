@@ -140,46 +140,60 @@ const W = 1200;
 
 /* Cards */
 
-function banner() {
+/** A gradient panel carrying the real contribution grid, dissolving toward the name. */
+function banner(gh) {
   const h = 210;
-  const cols = 20;
-  const rows = 6;
-  const cell = 13;
-  const gap = 5;
-  const gridW = cols * (cell + gap) - gap;
-  const gridX = W - 8 - gridW;
-  const gridY = Math.round((h - (rows * (cell + gap) - gap)) / 2);
+  const cell = 12;
+  const gap = 4;
+  const weeks = gh.weeks.slice(-26);
+  const gridW = weeks.length * (cell + gap) - gap;
+  const gridX = W - 28 - gridW;
+  const gridY = Math.round((h - (7 * (cell + gap) - gap)) / 2);
 
+  // Brighter than the page palette, because these sit on a dark gradient in both themes.
+  const tones = ['#18351f', '#1f5c34', '#2ea043', '#46d160', '#68e58a'];
   let grid = '';
-  for (let c = 0; c < cols; c += 1) {
-    for (let r = 0; r < rows; r += 1) {
-      const seed = (c * 5 + r * 3) % 9;
-      const tone = seed < 4 ? 1 : seed < 7 ? 2 : seed < 8 ? 3 : 4;
-      grid += `<rect x="${gridX + c * (cell + gap)}" y="${gridY + r * (cell + gap)}" width="${cell}" height="${cell}" rx="3" class="c${tone}" opacity="0.75">
-  <animate attributeName="opacity" values="0.35;1;0.35" keyTimes="0;0.5;1" dur="7s" begin="${(c * 0.18 + r * 0.06).toFixed(2)}s" repeatCount="indefinite"/></rect>`;
-    }
-  }
+  weeks.forEach((week, wi) => {
+    week.contributionDays.forEach((day) => {
+      const row = new Date(day.date).getUTCDay();
+      grid += `<rect x="${gridX + wi * (cell + gap)}" y="${gridY + row * (cell + gap)}" width="${cell}" height="${cell}" rx="2.5" fill="${tones[level(day.contributionCount)]}">
+  <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="${(wi * 0.02).toFixed(2)}s"/></rect>`;
+    });
+  });
 
-  const defs = `<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
-    <circle cx="1.5" cy="1.5" r="1.5" class="dim" opacity="0.28"/>
-  </pattern>
-  <linearGradient id="fade" x1="0" x2="1">
-    <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-    <stop offset="0.45" stop-color="#fff" stop-opacity="1"/>
-    <stop offset="1" stop-color="#fff" stop-opacity="0.25"/>
+  const defs = `<linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0b2b21"/>
+    <stop offset="0.45" stop-color="#0d3b2e"/>
+    <stop offset="1" stop-color="#0a2d3a"/>
   </linearGradient>
-  <mask id="fadeMask"><rect x="470" y="0" width="${W - 470}" height="${h}" fill="url(#fade)"/></mask>`;
+  <radialGradient id="glow" cx="0.78" cy="0.35" r="0.65">
+    <stop offset="0" stop-color="#39d353" stop-opacity="0.22"/>
+    <stop offset="1" stop-color="#39d353" stop-opacity="0"/>
+  </radialGradient>
+  <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+    <circle cx="1.5" cy="1.5" r="1.4" fill="#ffffff" opacity="0.06"/>
+  </pattern>
+  <linearGradient id="dissolve" x1="0" x2="1">
+    <stop offset="0" stop-color="#000"/>
+    <stop offset="0.42" stop-color="#5a5a5a"/>
+    <stop offset="0.75" stop-color="#e8e8e8"/>
+    <stop offset="1" stop-color="#fff"/>
+  </linearGradient>
+  <mask id="fadeLeft"><rect x="${gridX}" y="0" width="${gridW}" height="${h}" fill="url(#dissolve)"/></mask>`;
 
   return svg(W, h, `
-<rect x="470" y="0" width="${W - 470}" height="${h}" fill="url(#dots)" mask="url(#fadeMask)"/>
-<rect x="8" y="26" width="64" height="3" rx="1.5" class="accent">
-  <animate attributeName="width" values="0;64" keyTimes="0;1" dur="1s"/>
+<rect x="0" y="0" width="${W}" height="${h}" rx="14" fill="url(#panel)"/>
+<rect x="0" y="0" width="${W}" height="${h}" rx="14" fill="url(#glow)"/>
+<rect x="0" y="0" width="${W}" height="${h}" rx="14" fill="url(#dots)"/>
+<g mask="url(#fadeLeft)">${grid}</g>
+<rect x="36" y="36" width="56" height="3" rx="1.5" fill="#39d353">
+  <animate attributeName="width" values="0;56" keyTimes="0;1" dur="1s"/>
 </rect>
-<text x="8" y="86" font-family="${fonts.sans}" font-size="40" font-weight="700" class="fg">${escape(profile.name)}</text>
-<text x="8" y="115" font-family="${fonts.sans}" font-size="16.5" class="blue">${escape(profile.role)}</text>
-<text x="8" y="145" font-family="${fonts.mono}" font-size="12.5" class="muted">${escape(profile.fact)}</text>
-<text x="8" y="180" font-family="${fonts.mono}" font-size="13" class="accent">${escape(profile.site)} &#8599;</text>
-${grid}`, `${profile.name}, ${profile.role}`, defs);
+<text x="36" y="96" font-family="${fonts.sans}" font-size="40" font-weight="700" fill="#f0f6fc">${escape(profile.name)}</text>
+<text x="36" y="125" font-family="${fonts.sans}" font-size="16.5" fill="#7ee2a8">${escape(profile.role)}</text>
+<text x="36" y="153" font-family="${fonts.mono}" font-size="12.5" fill="#c3d0d9" opacity="0.85">${escape(profile.fact)}</text>
+<text x="36" y="178" font-family="${fonts.mono}" font-size="13" fill="#e6edf3" opacity="0.9">${escape(profile.site)} &#8599;</text>`,
+    `${profile.name}, ${profile.role}`, defs);
 }
 
 function skillsCard() {
@@ -312,7 +326,7 @@ ${stat(38, 34, solved, 'problems solved on LeetCode')}
 
 const [gh, lc] = await Promise.all([github(), leetcode()]);
 mkdirSync(OUT, { recursive: true });
-writeFileSync(path.join(OUT, 'banner.svg'), banner());
+writeFileSync(path.join(OUT, 'banner.svg'), banner(gh));
 writeFileSync(path.join(OUT, 'skills.svg'), skillsCard());
 writeFileSync(path.join(OUT, 'contributions.svg'), contributionsCard(gh));
 writeFileSync(path.join(OUT, 'leetcode.svg'), leetcodeCard(lc));

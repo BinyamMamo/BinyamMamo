@@ -10,7 +10,7 @@ export const profile = {
 
 export const skills = [
   { group: 'Backend', items: ['nodejs:Node.js', 'express:Express', 'nestjs:NestJS', 'python:Python', 'flask:Flask', 'django:Django', 'graphql:GraphQL'] },
-  { group: 'Data', items: ['postgresql:PostgreSQL', 'mongodb:MongoDB', 'mysql:MySQL', 'prisma:Prisma', 'supabase:Supabase', 'firebase:Firebase'] },
+  { group: 'Database', items: ['postgresql:PostgreSQL', 'mongodb:MongoDB', 'mysql:MySQL', 'prisma:Prisma', 'supabase:Supabase', 'firebase:Firebase'] },
   { group: 'Frontend', items: ['react:React', 'nextjs:Next.js', 'typescript:TypeScript', 'tailwindcss:Tailwind', 'javascript:JavaScript'] },
   { group: 'Infrastructure', items: ['docker:Docker', 'kubernetes:Kubernetes', 'nginx:Nginx', 'linux:Linux', 'git:Git'] },
 ];
