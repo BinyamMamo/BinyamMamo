@@ -230,6 +230,7 @@
   <animate attributeName="opacity" values="0;0.9" keyTimes="0;1" dur="0.5s" begin="0.56s"/></rect><rect x="1188" y="125" width="11" height="11" rx="2.5" fill="#39d353" opacity="0.9">
   <animate attributeName="opacity" values="0;0.9" keyTimes="0;1" dur="0.5s" begin="0.56s"/></rect><rect x="1203" y="35" width="11" height="11" rx="2.5" fill="#39d353" opacity="0.9">
   <animate attributeName="opacity" values="0;0.9" keyTimes="0;1" dur="0.5s" begin="0.58s"/></rect><rect x="1203" y="50" width="11" height="11" rx="2.5" fill="#39d353" opacity="0.9">
+  <animate attributeName="opacity" values="0;0.9" keyTimes="0;1" dur="0.5s" begin="0.58s"/></rect><rect x="1203" y="65" width="11" height="11" rx="2.5" fill="#39d353" opacity="0.9">
   <animate attributeName="opacity" values="0;0.9" keyTimes="0;1" dur="0.5s" begin="0.58s"/></rect></g>
 <text x="36" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="38" font-weight="700" fill="#f0f6fc">Binyam Mamo</text>
 <text x="36" y="94" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#7ee787">Backend and applied AI</text>
