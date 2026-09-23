@@ -14,7 +14,7 @@
 </g>
 <text x="38" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" class="fg">220</text>
 <text x="82.28" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" class="muted">problems solved on LeetCode</text>
-<text x="1192" y="34" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" class="dim">rank 762,582 · 49 active days · 5 day streak</text><text x="8" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" class="muted">Easy</text>
+<text x="1192" y="34" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" class="dim">rank 763,058 · 49 active days · 5 day streak</text><text x="8" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" class="muted">Easy</text>
 <rect x="76" y="77" width="470" height="10" rx="5" class="track"/>
 <rect x="76" y="77" width="79" height="10" rx="5" fill="#1cbaba">
   <animate attributeName="width" values="0;79" keyTimes="0;1" dur="1.1s" begin="0.00s"/>
@@ -32,7 +32,7 @@
   <animate attributeName="width" values="0;4" keyTimes="0;1" dur="1.1s" begin="0.30s"/>
 </rect>
 <text x="560" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" class="fg">9</text>
-<text x="573" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" class="dim">/ 976</text><text x="752" y="62" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="1.2" class="dim">SUBMISSIONS PER MONTH</text><rect x="761" y="168" width="18" height="2" rx="2" class="track">
+<text x="573" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" class="dim">/ 977</text><text x="752" y="62" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="1.2" class="dim">SUBMISSIONS PER MONTH</text><rect x="761" y="168" width="18" height="2" rx="2" class="track">
   <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.00s"/>
   <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.00s"/></rect><text x="770" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">O</text><rect x="798" y="132" width="18" height="38" rx="2" class="accent">
   <animate attributeName="y" values="168;132" keyTimes="0;1" dur="0.9s" begin="0.05s"/>
