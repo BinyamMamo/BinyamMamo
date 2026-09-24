@@ -14,7 +14,7 @@
 </g>
 <text x="38" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" class="fg">220</text>
 <text x="82.28" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" class="muted">problems solved on LeetCode</text>
-<text x="1192" y="34" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" class="dim">rank 763,058 · 49 active days · 5 day streak</text><text x="8" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" class="muted">Easy</text>
+<text x="1192" y="34" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" class="dim">rank 763,682 · 49 active days · 5 day streak</text><text x="8" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" class="muted">Easy</text>
 <rect x="76" y="77" width="470" height="10" rx="5" class="track"/>
 <rect x="76" y="77" width="79" height="10" rx="5" fill="#1cbaba">
   <animate attributeName="width" values="0;79" keyTimes="0;1" dur="1.1s" begin="0.00s"/>
