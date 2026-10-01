@@ -14,7 +14,7 @@
 </g>
 <text x="38" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" class="fg">220</text>
 <text x="82.28" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" class="muted">problems solved on LeetCode</text>
-<text x="1192" y="34" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" class="dim">rank 766,910 · 49 active days · 5 day streak</text><text x="8" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" class="muted">Easy</text>
+<text x="1192" y="34" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" class="dim">rank 767,934 · 49 active days · 5 day streak</text><text x="8" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" class="muted">Easy</text>
 <rect x="76" y="77" width="470" height="10" rx="5" class="track"/>
 <rect x="76" y="77" width="79" height="10" rx="5" fill="#1cbaba">
   <animate attributeName="width" values="0;79" keyTimes="0;1" dur="1.1s" begin="0.00s"/>
@@ -32,29 +32,29 @@
   <animate attributeName="width" values="0;4" keyTimes="0;1" dur="1.1s" begin="0.30s"/>
 </rect>
 <text x="560" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" class="fg">9</text>
-<text x="573" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" class="dim">/ 979</text><text x="752" y="62" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="1.2" class="dim">SUBMISSIONS PER MONTH</text><rect x="761" y="168" width="18" height="2" rx="2" class="track">
-  <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.00s"/>
-  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.00s"/></rect><text x="770" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">O</text><rect x="798" y="132" width="18" height="38" rx="2" class="accent">
+<text x="573" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" class="dim">/ 979</text><text x="752" y="62" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="1.2" class="dim">SUBMISSIONS PER MONTH</text><rect x="761" y="132" width="18" height="38" rx="2" class="accent">
+  <animate attributeName="y" values="168;132" keyTimes="0;1" dur="0.9s" begin="0.00s"/>
+  <animate attributeName="height" values="2;38" keyTimes="0;1" dur="0.9s" begin="0.00s"/></rect><text x="770" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">N</text><rect x="798" y="132" width="18" height="38" rx="2" class="accent">
   <animate attributeName="y" values="168;132" keyTimes="0;1" dur="0.9s" begin="0.05s"/>
-  <animate attributeName="height" values="2;38" keyTimes="0;1" dur="0.9s" begin="0.05s"/></rect><text x="807" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">N</text><rect x="835" y="132" width="18" height="38" rx="2" class="accent">
-  <animate attributeName="y" values="168;132" keyTimes="0;1" dur="0.9s" begin="0.10s"/>
-  <animate attributeName="height" values="2;38" keyTimes="0;1" dur="0.9s" begin="0.10s"/></rect><text x="844" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">D</text><rect x="871" y="78" width="18" height="92" rx="2" class="accent">
-  <animate attributeName="y" values="168;78" keyTimes="0;1" dur="0.9s" begin="0.15s"/>
-  <animate attributeName="height" values="2;92" keyTimes="0;1" dur="0.9s" begin="0.15s"/></rect><text x="880" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">J</text><rect x="908" y="132" width="18" height="38" rx="2" class="accent">
-  <animate attributeName="y" values="168;132" keyTimes="0;1" dur="0.9s" begin="0.20s"/>
-  <animate attributeName="height" values="2;38" keyTimes="0;1" dur="0.9s" begin="0.20s"/></rect><text x="917" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">F</text><rect x="945" y="156" width="18" height="14" rx="2" class="accent">
-  <animate attributeName="y" values="168;156" keyTimes="0;1" dur="0.9s" begin="0.25s"/>
-  <animate attributeName="height" values="2;14" keyTimes="0;1" dur="0.9s" begin="0.25s"/></rect><text x="954" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">M</text><rect x="981" y="143" width="18" height="27" rx="2" class="accent">
-  <animate attributeName="y" values="168;143" keyTimes="0;1" dur="0.9s" begin="0.30s"/>
-  <animate attributeName="height" values="2;27" keyTimes="0;1" dur="0.9s" begin="0.30s"/></rect><text x="990" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">A</text><rect x="1018" y="168" width="18" height="2" rx="2" class="track">
+  <animate attributeName="height" values="2;38" keyTimes="0;1" dur="0.9s" begin="0.05s"/></rect><text x="807" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">D</text><rect x="835" y="78" width="18" height="92" rx="2" class="accent">
+  <animate attributeName="y" values="168;78" keyTimes="0;1" dur="0.9s" begin="0.10s"/>
+  <animate attributeName="height" values="2;92" keyTimes="0;1" dur="0.9s" begin="0.10s"/></rect><text x="844" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">J</text><rect x="871" y="132" width="18" height="38" rx="2" class="accent">
+  <animate attributeName="y" values="168;132" keyTimes="0;1" dur="0.9s" begin="0.15s"/>
+  <animate attributeName="height" values="2;38" keyTimes="0;1" dur="0.9s" begin="0.15s"/></rect><text x="880" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">F</text><rect x="908" y="156" width="18" height="14" rx="2" class="accent">
+  <animate attributeName="y" values="168;156" keyTimes="0;1" dur="0.9s" begin="0.20s"/>
+  <animate attributeName="height" values="2;14" keyTimes="0;1" dur="0.9s" begin="0.20s"/></rect><text x="917" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">M</text><rect x="945" y="143" width="18" height="27" rx="2" class="accent">
+  <animate attributeName="y" values="168;143" keyTimes="0;1" dur="0.9s" begin="0.25s"/>
+  <animate attributeName="height" values="2;27" keyTimes="0;1" dur="0.9s" begin="0.25s"/></rect><text x="954" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">A</text><rect x="981" y="168" width="18" height="2" rx="2" class="track">
+  <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.30s"/>
+  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.30s"/></rect><text x="990" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">M</text><rect x="1018" y="168" width="18" height="2" rx="2" class="track">
   <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.35s"/>
-  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.35s"/></rect><text x="1027" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">M</text><rect x="1055" y="168" width="18" height="2" rx="2" class="track">
+  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.35s"/></rect><text x="1027" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">J</text><rect x="1055" y="168" width="18" height="2" rx="2" class="track">
   <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.40s"/>
-  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.40s"/></rect><text x="1064" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">J</text><rect x="1091" y="168" width="18" height="2" rx="2" class="track">
+  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.40s"/></rect><text x="1064" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">J</text><rect x="1091" y="168" width="18" height="2" rx="2" class="accent">
   <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.45s"/>
-  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.45s"/></rect><text x="1100" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">J</text><rect x="1128" y="168" width="18" height="2" rx="2" class="accent">
+  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.45s"/></rect><text x="1100" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">A</text><rect x="1128" y="168" width="18" height="2" rx="2" class="track">
   <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.50s"/>
-  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.50s"/></rect><text x="1137" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">A</text><rect x="1165" y="168" width="18" height="2" rx="2" class="track">
+  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.50s"/></rect><text x="1137" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">S</text><rect x="1165" y="168" width="18" height="2" rx="2" class="track">
   <animate attributeName="y" values="168;168" keyTimes="0;1" dur="0.9s" begin="0.55s"/>
-  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.55s"/></rect><text x="1174" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">S</text></g>
+  <animate attributeName="height" values="2;2" keyTimes="0;1" dur="0.9s" begin="0.55s"/></rect><text x="1174" y="188" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" class="dim">O</text></g>
 </svg>
