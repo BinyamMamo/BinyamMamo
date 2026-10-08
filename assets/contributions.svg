@@ -380,5 +380,6 @@
   <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="0.624s"/></rect><rect x="1061" y="92" width="14" height="14" rx="3" class="c0">
   <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="0.624s"/></rect><rect x="1061" y="110" width="14" height="14" rx="3" class="c0">
   <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="0.624s"/></rect><rect x="1061" y="128" width="14" height="14" rx="3" class="c0">
+  <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="0.624s"/></rect><rect x="1061" y="146" width="14" height="14" rx="3" class="c0">
   <animate attributeName="opacity" values="0;1" keyTimes="0;1" dur="0.5s" begin="0.624s"/></rect></g>
 </svg>
